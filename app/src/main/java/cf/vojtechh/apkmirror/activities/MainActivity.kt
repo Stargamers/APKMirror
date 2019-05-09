@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRespons
     /**
      * Listens for user clicking on the tab again. We first check if the page is scrolled. If so we move to top, otherwise we refresh the page
      */
-    private val tabReselectListener = BottomNavigationView.OnNavigationItemReselectedListener { menuItem -> scrollOrReload(if (menuItem.getItemId() == R.id.navigation_home) APKMIRROR_URL else if (menuItem.getItemId() == R.id.navigation_upload) APKMIRROR_UPLOAD_URL else null) }
+    private val tabReselectListener = BottomNavigationView.OnNavigationItemReselectedListener { menuItem -> scrollOrReload(if (menuItem.itemId == R.id.navigation_home) APKMIRROR_URL else if (menuItem.itemId == R.id.navigation_upload) APKMIRROR_UPLOAD_URL else null) }
 
     private val tabSelectListener = BottomNavigationView.OnNavigationItemSelectedListener { menuItem ->
         if (triggerAction) {
@@ -134,10 +134,10 @@ class MainActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRespons
                 val bundle = link.extras
                 if (bundle == null) {
                     //Normal start from launcher
-                    if (saveUrl)
-                        url = sharedPreferences!!.getString("last_url", APKMIRROR_URL)
+                    url = if (saveUrl)
+                        sharedPreferences!!.getString("last_url", APKMIRROR_URL)!!
                     else
-                        url = APKMIRROR_URL
+                        APKMIRROR_URL
                 } else {
                     //Ok it was shortcuts, check if it was settings
                     val bundleUrl = bundle.getString("url")
@@ -151,10 +151,10 @@ class MainActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRespons
                         } else
                             url = bundleUrl
                     } else {
-                        if (saveUrl)
-                            url = sharedPreferences!!.getString("last_url", APKMIRROR_URL)
+                        url = if (saveUrl)
+                            sharedPreferences!!.getString("last_url", APKMIRROR_URL)!!
                         else
-                            url = APKMIRROR_URL
+                            APKMIRROR_URL
                     }
                 }
             }
@@ -170,7 +170,7 @@ class MainActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRespons
         } catch (e: RuntimeException) {
             if (BuildConfig.DEBUG) e.printStackTrace()
             MaterialDialog.Builder(this).title(R.string.error).content(R.string.runtime_error_dialog_content)
-                    .positiveText(android.R.string.ok).neutralText(R.string.copy_log).onPositive { dialog, which -> finish() }.onNeutral { dialog, which ->
+                    .positiveText(android.R.string.ok).neutralText(R.string.copy_log).onPositive { _, _ -> finish() }.onNeutral { _, _ ->
                         // Gets a handle to the clipboard service.
                         val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                         // Creates a new text clip to put on the clipboard
@@ -196,7 +196,7 @@ class MainActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRespons
         val fab = sharedPreferences!!.getBoolean("fab", true)
         if (fab) {
             fabSearch!!.show()
-            fabSearch!!.setOnClickListener { v -> search() }
+            fabSearch!!.setOnClickListener { search() }
         }
     }
 
@@ -267,12 +267,12 @@ class MainActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRespons
     private fun runAsync(url: String) {
         //getting apps
         val pageAsync = PageAsync()
-        pageAsync.response = this
+        pageAsync.response = this@MainActivity
         pageAsync.execute(url)
     }
 
     private fun search() {
-        MaterialDialog.Builder(this).title(R.string.search).inputRange(1, 100).input(R.string.search, R.string.nothing) { dialog, input -> }.onPositive { dialog, which ->
+        MaterialDialog.Builder(this).title(R.string.search).inputRange(1, 100).input(R.string.search, R.string.nothing) { _, _ -> }.onPositive { dialog, _ ->
             if (dialog.inputEditText != null)
                 webView!!.loadUrl("https://www.apkmirror.com/?s=" + dialog.inputEditText!!.text)
             else
@@ -359,7 +359,7 @@ class MainActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRespons
         } else
             clr = Color.parseColor("#F47D20")
 
-        val window = this.window
+        val window = this@MainActivity.window
         window.statusBarColor = clr
     }
 
@@ -422,10 +422,10 @@ class MainActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRespons
     override fun onPageError(errorCode: Int, description: String, failingUrl: String) {
         if (errorCode == -2) {
             MaterialDialog.Builder(this).title(R.string.error).content(getString(R.string.error_while_loading_page) + " " + failingUrl + "(" + errorCode + " " + description + ")")
-                    .positiveText(R.string.refresh).negativeText(android.R.string.cancel).neutralText("Dismiss").onPositive { dialog, which ->
+                    .positiveText(R.string.refresh).negativeText(android.R.string.cancel).neutralText("Dismiss").onPositive { dialog, _ ->
                         webView!!.reload()
                         dialog.dismiss()
-                    }.onNegative { dialog, which -> finish() }.onNeutral { materialDialog, dialogAction -> materialDialog.dismiss() }.show()
+                    }.onNegative { _, _ -> finish() }.onNeutral { materialDialog, _ -> materialDialog.dismiss() }.show()
         }
 
     }
@@ -436,7 +436,7 @@ class MainActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRespons
         else
             MaterialDialog.Builder(this@MainActivity).title(R.string.write_permission).content(R.string.storage_access)
                     .positiveText(R.string.request_permission).negativeText(android.R.string.cancel)
-                    .onPositive { dialog, which -> ActivityCompat.requestPermissions(this@MainActivity, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1) }
+                    .onPositive { _, _ -> ActivityCompat.requestPermissions(this@MainActivity, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1) }
                     .show()
     }
 
