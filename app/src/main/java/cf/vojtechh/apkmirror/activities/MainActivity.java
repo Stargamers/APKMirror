@@ -298,31 +298,18 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
                 .show();
     }
 
-    private OnTabReselectListener tabReselectListener = new OnTabReselectListener() {
-        @Override
-        public void onTabReSelected(@IdRes int tabId) {
-            int webScrollY = webView.getScrollY();
-            if (tabId == R.id.navigation_home) {
-                //Home re-pressed
-                if (webScrollY != 0) {
-                    //Scroll to top
-                    webView.setScrollY(0);
-                } else {
-                    //Load url
-                    webView.loadUrl(APKMIRROR_URL);
-                }
-            } else if (tabId == R.id.navigation_upload) {
-                //Upload re-pressed
-                if (webScrollY != 0) {
-                    //Scroll to top
-                    webView.setScrollY(0);
-                } else {
-                    //Load url
-                    webView.loadUrl(APKMIRROR_UPLOAD_URL);
-                }
-            }
-        }
+    /**
+     * Listens for user clicking on the tab again. We first check if the page is scrolled. If so we move to top, otherwise we refresh the page
+     */
+    private OnTabReselectListener tabReselectListener = tabId -> {
+        if (tabId == R.id.navigation_home) scrollOrReload(APKMIRROR_URL);
+        else if (tabId == R.id.navigation_upload) scrollOrReload(APKMIRROR_UPLOAD_URL);
     };
+
+    private void scrollOrReload(String url) {
+        if (webView.getScrollY() != 0) webView.setScrollY(0);
+        else webView.loadUrl(url);
+    }
 
     private OnTabSelectListener tabSelectListener = new OnTabSelectListener() {
         @Override
