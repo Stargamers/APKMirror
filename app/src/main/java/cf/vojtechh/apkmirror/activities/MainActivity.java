@@ -223,15 +223,13 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        //Next line causes crash
-        //webView.saveState(outState);
+        webView.saveState(outState);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        //Next line causes crash
-        //webView.restoreState(savedInstanceState);
+        webView.restoreState(savedInstanceState);
     }
 
     @Override
