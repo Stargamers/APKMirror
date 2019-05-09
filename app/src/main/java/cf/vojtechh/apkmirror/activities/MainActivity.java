@@ -70,14 +70,14 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
     private static final String APKMIRROR_URL = "https://www.apkmirror.com/";
     private static final String APKMIRROR_UPLOAD_URL = "https://www.apkmirror.com/apk-upload/";
 
-    Integer shortAnimDuration;
-    Integer previsionThemeColor = Color.parseColor("#FF8B14");
-    SharedPreferences sharedPreferences;
+    private Integer shortAnimDuration;
+    private Integer previsionThemeColor = Color.parseColor("#FF8B14");
+    private SharedPreferences sharedPreferences;
 
     private boolean settingsShortcut = false;
     private boolean triggerAction = true;
 
-    NfcAdapter nfcAdapter;
+    private NfcAdapter nfcAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -251,7 +251,7 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
     }
 
 
-    public void runAsync(String url) {
+    private void runAsync(String url) {
         //getting apps
         PageAsync pageAsync = new PageAsync();
         pageAsync.response = MainActivity.this;
@@ -271,7 +271,7 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
     /**
      * Listens for user clicking on the tab again. We first check if the page is scrolled. If so we move to top, otherwise we refresh the page
      */
-    private BottomNavigationView.OnNavigationItemReselectedListener tabReselectListener = menuItem -> scrollOrReload((menuItem.getItemId() == R.id.navigation_home) ? APKMIRROR_URL : (menuItem.getItemId() == R.id.navigation_upload) ? APKMIRROR_UPLOAD_URL : null);
+    private final BottomNavigationView.OnNavigationItemReselectedListener tabReselectListener = menuItem -> scrollOrReload((menuItem.getItemId() == R.id.navigation_home) ? APKMIRROR_URL : (menuItem.getItemId() == R.id.navigation_upload) ? APKMIRROR_UPLOAD_URL : null);
 
     private void scrollOrReload(@Nullable String url) {
         if (url == null) return;
@@ -279,7 +279,7 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
         else webView.loadUrl(url);
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener tabSelectListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
+    private final BottomNavigationView.OnNavigationItemSelectedListener tabSelectListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
             if (triggerAction) {
@@ -475,7 +475,7 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
         startActivity(browserIntent);
     }
 
-    private WebChromeClient chromeClient = new WebChromeClient() {
+    private final WebChromeClient chromeClient = new WebChromeClient() {
         @Override
         public void onProgressChanged(WebView view, int progress) {
             //update the progressbar value

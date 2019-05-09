@@ -1,11 +1,9 @@
 package cf.vojtechh.apkmirror.fragments;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
 
 import cf.vojtechh.apkmirror.R;
 import de.psdev.licensesdialog.LicensesDialog;
@@ -16,13 +14,10 @@ import de.psdev.licensesdialog.model.Notices;
 
 public class PreferencesFragment extends PreferenceFragment {
 
-    SharedPreferences prefsFragment;
-
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
-        prefsFragment = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
 
         findPreference("github").setOnPreferenceClickListener(pref -> {
             Intent githubIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/vojta-horanek/APKMirror"));
