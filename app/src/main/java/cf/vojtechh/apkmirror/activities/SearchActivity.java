@@ -1,9 +1,9 @@
 package cf.vojtechh.apkmirror.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.widget.Toast;
 
@@ -13,7 +13,7 @@ import com.afollestad.materialdialogs.Theme;
 
 import cf.vojtechh.apkmirror.R;
 
-public class SearchActivity extends Activity {
+public class SearchActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
