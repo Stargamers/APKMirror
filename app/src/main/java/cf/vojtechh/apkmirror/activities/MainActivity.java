@@ -254,7 +254,7 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
     private void runAsync(String url) {
         //getting apps
         PageAsync pageAsync = new PageAsync();
-        pageAsync.response = MainActivity.this;
+        pageAsync.setResponse(MainActivity.this);
         pageAsync.execute(url);
     }
 
