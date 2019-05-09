@@ -71,11 +71,8 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
     private static final String APKMIRROR_UPLOAD_URL = "http://www.apkmirror.com/apk-upload/";
 
     Integer shortAnimDuration;
-
     Integer previsionThemeColor = Color.parseColor("#FF8B14");
-
     SharedPreferences sharedPreferences;
-
 
     private boolean settingsShortcut = false;
     private boolean triggerAction = true;
@@ -109,12 +106,9 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
             initNavigation();
 
             boolean saveUrl = sharedPreferences.getBoolean("save_url", false);
-
             String url;
-
             Intent link = getIntent();
             Uri data = link.getData();
-
 
             if (data != null) {
                 //App was opened from browser
@@ -151,9 +145,7 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
                     }
                 }
             }
-
             initWebView(url);
-
             //I know not the best solution xD
             if (!settingsShortcut) {
                 firstLoadingView.setVisibility(View.VISIBLE);
@@ -166,9 +158,7 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
                     }
                 }, 2000);
             }
-
         } catch (final RuntimeException e) {
-
             new MaterialDialog.Builder(this)
                     .title(R.string.error)
                     .content(R.string.runtime_error_dialog_content)
@@ -195,12 +185,10 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
                     }
                 }
             }).show();
-
         }
     }
 
     private void initNavigation() {
-
         //Making the bottom navigation do something
         navigation.setOnTabSelectListener(tabSelectListener);
         navigation.setOnTabReselectListener(tabReselectListener);
@@ -209,8 +197,6 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
             navigation.setItems(R.xml.navigation_exit);
             navigation.invalidate();
         }
-
-
     }
 
     private void initSearchFab() {
@@ -229,21 +215,17 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
 
 
     private void initWebView(String url) {
-
         webView.setListener(this, this);
         webView.addPermittedHostname("apkmirror.com");
         webView.setWebChromeClient(chromeClient);
         webView.setUploadableFileTypes("application/vnd.android.package-archive");
         webView.loadUrl(url);
-
-
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 webView.reload();
             }
         });
-
     }
 
 
@@ -295,13 +277,10 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
 
     @Override
     public void onBackPressed() {
-
         if (settingsLayoutFragment.getVisibility() != View.VISIBLE) {
-
             if (!webView.onBackPressed()) {
                 return;
             }
-
         } else {
             crossFade(settingsLayoutFragment, webContainer);
             if (webView != null && webView.getUrl().equals(APKMIRROR_UPLOAD_URL)) {
@@ -310,7 +289,6 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
             } else {
                 triggerAction = false;
                 navigation.selectTabWithId(R.id.navigation_home);
-
             }
             return;
         }
@@ -326,7 +304,6 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
     }
 
     private void search() {
-
         new MaterialDialog.Builder(this)
                 .title(R.string.search)
                 .inputRange(1, 100)
@@ -347,14 +324,12 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
                 })
                 .negativeText(android.R.string.cancel)
                 .show();
-
     }
 
     private OnTabReselectListener tabReselectListener = new OnTabReselectListener() {
         @Override
         public void onTabReSelected(@IdRes int tabId) {
             Integer webScrollY = webView.getScrollY();
-
             if (tabId == R.id.navigation_home) {
                 //Home re-pressed
                 if (webScrollY != 0) {
@@ -380,16 +355,13 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
     private OnTabSelectListener tabSelectListener = new OnTabSelectListener() {
         @Override
         public void onTabSelected(@IdRes int tabId) {
-
             if (triggerAction) {
-
                 if (tabId == R.id.navigation_home) {
                     //Home pressed
                     if (settingsLayoutFragment.getVisibility() != View.VISIBLE) {
                         //settings is not visible
                         //Load url
                         webView.loadUrl(APKMIRROR_URL);
-
                     } else {
                         //settings is visible, gonna hide it
                         if (webView.getUrl().equals(APKMIRROR_UPLOAD_URL)) {
@@ -399,7 +371,6 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             changeUIColor(previsionThemeColor);
                         }
-
                     }
                 } else if (tabId == R.id.navigation_upload) {
                     //Upload pressed
@@ -416,7 +387,6 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             changeUIColor(previsionThemeColor);
                         }
-
                     }
                 } else if (tabId == R.id.navigation_settings) {
                     //Settings pressed
@@ -427,28 +397,21 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         changeUIColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
                     }
-
                 } else if (tabId == R.id.navigation_exit) {
                     finish();
                 }
-
             }
-
             triggerAction = true;
-
         }
     };
 
     private void crossFade(final View toHide, View toShow) {
-
         toShow.setAlpha(0f);
         toShow.setVisibility(View.VISIBLE);
-
         toShow.animate()
                 .alpha(1f)
                 .setDuration(shortAnimDuration)
                 .setListener(null);
-
         toHide.animate()
                 .alpha(0f)
                 .setDuration(shortAnimDuration)
@@ -471,8 +434,6 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
         } else {
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
         }
-
-
     }
 
     private boolean isWritePermissionGranted() {
@@ -481,21 +442,17 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
 
     @Override
     public void onProcessFinish(Integer themeColor) {
-
         // updating interface
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             changeUIColor(themeColor);
         }
         previsionThemeColor = themeColor;
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void changeUIColor(Integer color) {
-
         ValueAnimator anim = ValueAnimator.ofArgb(previsionThemeColor, color);
         anim.setEvaluator(new ArgbEvaluator());
-
         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
@@ -506,7 +463,6 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
 
             }
         });
-
         anim.setDuration(getResources().getInteger(android.R.integer.config_shortAnimTime));
         anim.start();
         refreshLayout.setColorSchemeColors(color, color, color);
@@ -515,11 +471,8 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void setSystemBarColor(int color) {
-
         int clr;
-
         //this makes the color darker or uses nicer orange color
-
         if (color != Color.parseColor("#FF8B14")) {
             float[] hsv = new float[3];
             Color.colorToHSV(color, hsv);
@@ -535,16 +488,13 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
     }
 
     private void setupNFC(String url) {
-
         if (nfcAdapter != null) { // in case there is no NFC
-
             try {
                 // create an NDEF message containing the current URL:
                 NdefRecord rec = NdefRecord.createUri(url); // url: current URL (String or Uri)
                 NdefMessage ndef = new NdefMessage(rec);
                 // make it available via Android Beam:
                 nfcAdapter.setNdefPushMessage(ndef, this, this);
-
             } catch (IllegalStateException e) {
                 e.printStackTrace();
             }
@@ -555,8 +505,6 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
     //WebView factory methods bellow
     @Override
     public void onPageStarted(String url, Bitmap favicon) {
-
-
         if (!url.contains("http://www.apkmirror.com/wp-content/")) {
 
             runAsync(url);
@@ -593,7 +541,6 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
 
     @Override
     public void onPageFinished(String url) {
-
         progressBarContainer.animate()
                 .alpha(0f)
                 .setDuration(getResources().getInteger(android.R.integer.config_longAnimTime))
@@ -613,7 +560,6 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
 
     @Override
     public void onPageError(int errorCode, String description, String failingUrl) {
-
         if (errorCode == -2) {
             new MaterialDialog.Builder(this)
                     .title(R.string.error)
@@ -647,7 +593,6 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
 
     @Override
     public void onDownloadRequested(String url, String suggestedFilename, String mimeType, long contentLength, String contentDisposition, String userAgent) {
-
         if (isWritePermissionGranted()) {
             download(url, suggestedFilename);
         } else {
@@ -679,7 +624,6 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
 
         @Override
         public void onProgressChanged(WebView view, int progress) {
-
             //update the progressbar value
             ObjectAnimator animation = ObjectAnimator.ofInt(progressBar, "progress", progress);
             animation.setDuration(100); // 0.5 second
