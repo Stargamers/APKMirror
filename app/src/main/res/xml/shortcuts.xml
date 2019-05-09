@@ -2,7 +2,7 @@
 <shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
     <shortcut
         android:enabled="true"
-        android:icon="@drawable/ic_shortcut_file_upload"
+        android:icon="@drawable/ic_shortcut_file_upload_vector"
         android:shortcutId="shortcut_upload"
         android:shortcutShortLabel="@string/upload">
         <intent
@@ -19,7 +19,7 @@
 
     <shortcut
         android:enabled="true"
-        android:icon="@drawable/ic_shortcut_search"
+        android:icon="@drawable/ic_shortcut_search_vector"
         android:shortcutId="shortcut_search"
         android:shortcutShortLabel="@string/search">
         <intent
@@ -33,7 +33,7 @@
 
     <shortcut
         android:enabled="true"
-        android:icon="@drawable/ic_shortcut_settings"
+        android:icon="@drawable/ic_shortcut_settings_vector"
         android:shortcutId="shortcut_settings"
         android:shortcutShortLabel="@string/settings">
         <intent
