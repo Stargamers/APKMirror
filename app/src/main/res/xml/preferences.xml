@@ -12,7 +12,7 @@
     <SwitchPreference
         android:defaultValue="false"
         android:key="save_url"
-            android:title="@string/save_url_pref" />
+        android:title="@string/save_url_pref" />
 
     <SwitchPreference
         android:defaultValue="true"

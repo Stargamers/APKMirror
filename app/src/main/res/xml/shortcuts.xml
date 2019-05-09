@@ -12,7 +12,6 @@
             <extra
                 android:name="url"
                 android:value="http://www.apkmirror.com/apk-upload/" />
-
         </intent>
     </shortcut>
 
