@@ -15,6 +15,7 @@
         app:itemBackground="@color/white"
         app:itemIconTint="@color/bottom_bar_selector"
         app:itemTextColor="@color/bottom_bar_selector"
+        app:labelVisibilityMode="labeled"
         app:menu="@menu/navigation" />
 
     <LinearLayout

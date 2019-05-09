@@ -361,8 +361,9 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
         anim.addUpdateListener(valueAnimator -> {
             progressBar.getProgressDrawable().setColorFilter(new LightingColorFilter(0xFF000000, (Integer) valueAnimator.getAnimatedValue()));
             setSystemBarColor((Integer) valueAnimator.getAnimatedValue());
-            navigation.setItemTextColor(ColorStateList.valueOf((Integer) valueAnimator.getAnimatedValue()));
-            navigation.setItemIconTintList(new ColorStateList(COLOR_STATES, new int[]{(int) valueAnimator.getAnimatedValue(), R.color.inactive}));
+            ColorStateList toUpdate = new ColorStateList(COLOR_STATES, new int[]{(int) valueAnimator.getAnimatedValue(), R.color.inactive});
+            navigation.setItemTextColor(toUpdate);
+            navigation.setItemIconTintList(toUpdate);
             fabSearch.setBackgroundTintList(ColorStateList.valueOf((Integer) valueAnimator.getAnimatedValue()));
 
         });

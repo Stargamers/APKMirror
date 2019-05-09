@@ -7,8 +7,8 @@ android {
         applicationId "cf.vojtechh.apkmirror"
         minSdkVersion 16
         targetSdkVersion 28
-        versionName "4.0"
-        versionCode 20190510
+        versionName "4.0.1"
+        versionCode 20190511
         vectorDrawables.useSupportLibrary = true
     }
 
