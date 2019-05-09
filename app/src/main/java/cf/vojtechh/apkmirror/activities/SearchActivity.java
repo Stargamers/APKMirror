@@ -23,11 +23,8 @@ public class SearchActivity extends AppCompatActivity {
                 .negativeText(android.R.string.cancel).input(R.string.search, R.string.nothing, (dialog, input) -> {})
                 .onPositive((dialog, which) -> {
                     Intent i = new Intent(SearchActivity.this, MainActivity.class);
-                    if (dialog.getInputEditText() != null) {
-                        i.putExtra("url", "https://www.apkmirror.com/?s=" + dialog.getInputEditText().getText());
-                    } else {
-                        Toast.makeText(SearchActivity.this, getString(R.string.search_error), Toast.LENGTH_SHORT).show();
-                    }
+                    if (dialog.getInputEditText() != null) i.putExtra("url", "https://www.apkmirror.com/?s=" + dialog.getInputEditText().getText());
+                    else Toast.makeText(SearchActivity.this, getString(R.string.search_error), Toast.LENGTH_SHORT).show();
                     startActivity(i);
                     finish();
                 }).onNegative((dialog, which) -> finish()).show();

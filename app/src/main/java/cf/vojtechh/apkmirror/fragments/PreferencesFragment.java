@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 
@@ -25,28 +24,23 @@ public class PreferencesFragment extends PreferenceFragment {
         addPreferencesFromResource(R.xml.preferences);
         prefsFragment = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
 
-        Preference github = findPreference("github");
-        Preference libs = findPreference("libs");
-        Preference xda = findPreference("xda");
-
-        github.setOnPreferenceClickListener(pref -> {
+        findPreference("github").setOnPreferenceClickListener(pref -> {
             Intent githubIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/vojta-horanek/APKMirror"));
             startActivity(githubIntent);
             return true;
         });
 
-        libs.setOnPreferenceClickListener(pref -> {
+        findPreference("libs").setOnPreferenceClickListener(pref -> {
             final Notices notices = new Notices();
             notices.addNotice(new Notice("jsoup: Java HTML Parser", "https://github.com/jhy/jsoup/", "Jonathan Hedley (jonathan@hedley.net)", new MITLicense()));
             notices.addNotice(new Notice("AdvancedWebView", "https://github.com/delight-im/Android-AdvancedWebView", "Copyright (c) delight.im (https://www.delight.im/)", new MITLicense()));
-            notices.addNotice(new Notice("BottomBar library for Android", "https://github.com/roughike/BottomBar", "Copyright (c) 2016 Iiro Krankka (http://github.com/roughike)", new ApacheSoftwareLicense20()));
             notices.addNotice(new Notice("Material Dialogs", "https://github.com/afollestad/material-dialogs", "Copyright (c) 2014-2016 Aidan Michael Follestad", new MITLicense()));
             notices.addNotice(new Notice("LicensesDialog", "http://psdev.de", "Copyright 2013 Philip Schiffer <admin@psdev.de>", new ApacheSoftwareLicense20()));
             new LicensesDialog.Builder(getActivity()).setNotices(notices).setTitle(getString(R.string.libraries)).build().show();
             return true;
         });
 
-        xda.setOnPreferenceClickListener(pref -> {
+        findPreference("xda").setOnPreferenceClickListener(pref -> {
             Intent threadIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://forum.xda-developers.com/android/apps-games/apkmirror-web-app-t3450564"));
             startActivity(threadIntent);
             return true;

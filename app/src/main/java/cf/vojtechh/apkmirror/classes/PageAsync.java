@@ -20,13 +20,7 @@ public class PageAsync extends AsyncTask<String, Integer, Integer> {
         try {
             Document doc = Jsoup.connect(url[0]).get();
             Elements metaElements = doc.select("meta[name=theme-color]");
-
-            String themeColor;
-            if (metaElements.size() != 0) themeColor = metaElements.get(0).attr("content");
-            else themeColor = "#FF8B14";
-
-            return Color.parseColor(themeColor);
-
+            return Color.parseColor((metaElements.size() != 0) ? metaElements.get(0).attr("content") : "#FF8B14");
         } catch (IOException e) {
             e.printStackTrace();
             return null;
