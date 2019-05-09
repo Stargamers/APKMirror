@@ -28,7 +28,7 @@ public class SearchActivity extends AppCompatActivity {
                 .onPositive((dialog, which) -> {
                     Intent i = new Intent(SearchActivity.this, MainActivity.class);
                     if (dialog.getInputEditText() != null) {
-                        i.putExtra("url", "http://www.apkmirror.com/?s=" + dialog.getInputEditText().getText());
+                        i.putExtra("url", "https://www.apkmirror.com/?s=" + dialog.getInputEditText().getText());
                     } else {
                         Toast.makeText(SearchActivity.this, getString(R.string.search_error), Toast.LENGTH_SHORT).show();
                     }

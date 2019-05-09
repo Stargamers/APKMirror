@@ -66,8 +66,8 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
     private FrameLayout progressBarContainer;
     private LinearLayout firstLoadingView;
 
-    private static final String APKMIRROR_URL = "http://www.apkmirror.com/";
-    private static final String APKMIRROR_UPLOAD_URL = "http://www.apkmirror.com/apk-upload/";
+    private static final String APKMIRROR_URL = "https://www.apkmirror.com/";
+    private static final String APKMIRROR_UPLOAD_URL = "https://www.apkmirror.com/apk-upload/";
 
     Integer shortAnimDuration;
     Integer previsionThemeColor = Color.parseColor("#FF8B14");
@@ -289,7 +289,7 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
                 })
                 .onPositive((dialog, which) -> {
                     if (dialog.getInputEditText() != null) {
-                        webView.loadUrl("http://www.apkmirror.com/?s=" + dialog.getInputEditText().getText());
+                        webView.loadUrl("https://www.apkmirror.com/?s=" + dialog.getInputEditText().getText());
                     } else {
                         Toast.makeText(MainActivity.this, getString(R.string.search_error), Toast.LENGTH_SHORT).show();
                     }
@@ -453,7 +453,6 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
 
         Window window = MainActivity.this.getWindow();
         window.setStatusBarColor(clr);
-
     }
 
     private void setupNFC(String url) {
@@ -470,12 +469,10 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
         }
     }
 
-
     //WebView factory methods bellow
     @Override
     public void onPageStarted(String url, Bitmap favicon) {
-        if (!url.contains("http://www.apkmirror.com/wp-content/")) {
-
+        if (!url.contains("https://www.apkmirror.com/wp-content/") || !url.contains("http://www.apkmirror.com/wp-content/")) {
             runAsync(url);
             setupNFC(url);
 
@@ -504,7 +501,6 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
                             progressBarContainer.setVisibility(View.VISIBLE);
                         }
                     });
-
         }
     }
 
