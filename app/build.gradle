@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 28
@@ -36,5 +38,10 @@ dependencies {
     implementation 'com.github.delight-im:Android-AdvancedWebView:v3.0.0' //WebView
     implementation 'org.jsoup:jsoup:1.10.2' //HTML Parser
     implementation 'de.psdev.licensesdialog:licensesdialog:1.8.3' //Licenses dialog
-    implementation 'com.afollestad.material-dialogs:core:0.9.6.0' //Material dialogs
+    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
+    implementation "androidx.core:core-ktx:1.0.2"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version" //Material dialogs
+}
+repositories {
+    mavenCentral()
 }
