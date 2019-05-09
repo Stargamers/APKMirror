@@ -16,5 +16,5 @@
     <style name="search" parent="Theme.AppCompat.Light.Dialog">
         <item name="android:textColorPrimary">@color/colorPrimary</item>
     </style>
-    
+
 </resources>

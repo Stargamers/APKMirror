@@ -150,8 +150,7 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
             new MaterialDialog.Builder(this).title(R.string.error).content(R.string.runtime_error_dialog_content)
                     .positiveText(android.R.string.ok).neutralText(R.string.copy_log).onPositive((dialog, which) -> finish()).onNeutral((dialog, which) -> {
                 // Gets a handle to the clipboard service.
-                ClipboardManager clipboard = (ClipboardManager)
-                        getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 // Creates a new text clip to put on the clipboard
                 ClipData clip = ClipData.newPlainText("log", e.toString());
                 if (clipboard != null) clipboard.setPrimaryClip(clip);
@@ -210,9 +209,8 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
 
     @Override
     protected void onStop() {
-        if (sharedPreferences.getBoolean("save_url", false) && !webView.getUrl().equals("apkmirror://settings")) {
+        if (sharedPreferences.getBoolean("save_url", false) && !webView.getUrl().equals("apkmirror://settings"))
             sharedPreferences.edit().putString("last_url", webView.getUrl()).apply();
-        }
         super.onStop();
     }
 
@@ -287,28 +285,10 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
             if (triggerAction) {
                 switch (menuItem.getItemId()) {
                     case R.id.navigation_home: //Home pressed
-                        if (settingsLayoutFragment.getVisibility() != View.VISIBLE)
-                            webView.loadUrl(APKMIRROR_URL); //settings is not visible, Load url
-                        else {
-                            //settings is visible, gonna hide it
-                            if (webView.getUrl().equals(APKMIRROR_UPLOAD_URL))
-                                webView.loadUrl(APKMIRROR_URL);
-                            crossFade(settingsLayoutFragment, webContainer);
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                                changeUIColor(previsionThemeColor);
-                        }
+                        selectNavigationItem(APKMIRROR_URL);
                         break;
                     case R.id.navigation_upload: //Upload pressed
-                        if (settingsLayoutFragment.getVisibility() != View.VISIBLE)
-                            webView.loadUrl(APKMIRROR_UPLOAD_URL); //settings is not visible, Load url
-                        else {
-                            //settings is visible, gonna hide it
-                            if (!webView.getUrl().equals(APKMIRROR_UPLOAD_URL))
-                                webView.loadUrl(APKMIRROR_UPLOAD_URL);
-                            crossFade(settingsLayoutFragment, webContainer);
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                                changeUIColor(previsionThemeColor);
-                        }
+                        selectNavigationItem(APKMIRROR_UPLOAD_URL);
                         break;
                     case R.id.navigation_settings: //Settings pressed
                         if (firstLoadingView.getVisibility() == View.VISIBLE)
@@ -326,6 +306,19 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
             return true;
         }
     };
+
+    private void selectNavigationItem(String url) {
+        if (settingsLayoutFragment.getVisibility() != View.VISIBLE)
+            webView.loadUrl(url); //settings is not visible, Load url
+        else {
+            //settings is visible, gonna hide it
+            if (!webView.getUrl().equals(url))
+                webView.loadUrl(url);
+            crossFade(settingsLayoutFragment, webContainer);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                changeUIColor(previsionThemeColor);
+        }
+    }
 
     private void crossFade(final View toHide, View toShow) {
         toShow.setAlpha(0f);
