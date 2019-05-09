@@ -48,6 +48,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import cf.vojtechh.apkmirror.BuildConfig;
 import cf.vojtechh.apkmirror.R;
 import cf.vojtechh.apkmirror.classes.PageAsync;
 import cf.vojtechh.apkmirror.interfaces.AsyncResponse;
@@ -144,6 +145,7 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
                 new Handler().postDelayed(() -> { if (firstLoadingView.getVisibility() == View.VISIBLE) crossFade(firstLoadingView, webContainer); }, 2000);
             }
         } catch (final RuntimeException e) {
+            if (BuildConfig.DEBUG) e.printStackTrace();
             new MaterialDialog.Builder(this).title(R.string.error).content(R.string.runtime_error_dialog_content)
                     .positiveText(android.R.string.ok).neutralText(R.string.copy_log).onPositive((dialog, which) -> finish()).onNeutral((dialog, which) -> {
                 // Gets a handle to the clipboard service.
@@ -185,7 +187,6 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
         webView.loadUrl(url);
         refreshLayout.setOnRefreshListener(() -> webView.reload());
     }
-
 
     @Override
     protected void onResume() {
