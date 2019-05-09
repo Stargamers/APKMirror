@@ -3,7 +3,8 @@ package cf.vojtechh.apkmirror.fragments;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
+
+import androidx.preference.PreferenceFragment;
 
 import cf.vojtechh.apkmirror.R;
 import de.psdev.licensesdialog.LicensesDialog;
@@ -15,8 +16,7 @@ import de.psdev.licensesdialog.model.Notices;
 public class PreferencesFragment extends PreferenceFragment {
 
     @Override
-    public void onCreate(final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.preferences);
 
         findPreference("github").setOnPreferenceClickListener(pref -> {
