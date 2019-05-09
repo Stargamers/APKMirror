@@ -27,4 +27,5 @@
 -keep class * extends android.webkit.WebChromeClient { *; }
 -dontwarn im.delight.android.webview.**
 -keeppackagenames org.jsoup.nodes
+-keepnames class org.jsoup.nodes.Entities
 
