@@ -26,12 +26,11 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    //noinspection GradleCompatible
-    implementation 'com.android.support:design:27.0.2'
+    implementation 'com.google.android.material:material:1.0.0'
     //Added dependencies below
     implementation 'com.github.delight-im:Android-AdvancedWebView:v3.0.0' //WebView
     implementation 'org.jsoup:jsoup:1.10.2' //HTML Parser
     implementation 'de.psdev.licensesdialog:licensesdialog:1.8.3' //Licenses dialog
-    implementation 'com.afollestad.material-dialogs:core:0.9.2.3' //Material dialogs
+    implementation 'com.afollestad.material-dialogs:core:0.9.6.0' //Material dialogs
     implementation 'com.roughike:bottom-bar:2.3.1' //Bottom navigation
 }
