@@ -118,11 +118,8 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
                 Bundle bundle = link.getExtras();
                 if (bundle == null) {
                     //Normal start from launcher
-                    if (saveUrl) {
-                        url = sharedPreferences.getString("last_url", APKMIRROR_URL);
-                    } else {
-                        url = APKMIRROR_URL;
-                    }
+                    if (saveUrl) url = sharedPreferences.getString("last_url", APKMIRROR_URL);
+                    else url = APKMIRROR_URL;
                 } else {
                     //Ok it was shortcuts, check if it was settings
                     String bundleUrl = bundle.getString("url");
@@ -133,15 +130,10 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
                             navigation.selectTabWithId(R.id.navigation_settings);
                             crossFade(webContainer, settingsLayoutFragment);
                             settingsShortcut = true;
-                        } else {
-                            url = bundleUrl;
-                        }
+                        } else url = bundleUrl;
                     } else {
-                        if (saveUrl) {
-                            url = sharedPreferences.getString("last_url", APKMIRROR_URL);
-                        } else {
-                            url = APKMIRROR_URL;
-                        }
+                        if (saveUrl) url = sharedPreferences.getString("last_url", APKMIRROR_URL);
+                        else url = APKMIRROR_URL;
                     }
                 }
             }
@@ -149,31 +141,19 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
             //I know not the best solution xD
             if (!settingsShortcut) {
                 firstLoadingView.setVisibility(View.VISIBLE);
-                new Handler().postDelayed(() -> {
-                    if (firstLoadingView.getVisibility() == View.VISIBLE) {
-                        crossFade(firstLoadingView, webContainer);
-                    }
-                }, 2000);
+                new Handler().postDelayed(() -> { if (firstLoadingView.getVisibility() == View.VISIBLE) crossFade(firstLoadingView, webContainer); }, 2000);
             }
         } catch (final RuntimeException e) {
-            new MaterialDialog.Builder(this)
-                    .title(R.string.error)
-                    .content(R.string.runtime_error_dialog_content)
-                    .positiveText(android.R.string.ok)
-                    .neutralText(R.string.copy_log)
-                    .onPositive((dialog, which) -> finish()
-                    ).onNeutral((dialog, which) -> {
-                        // Gets a handle to the clipboard service.
-                        ClipboardManager clipboard = (ClipboardManager)
-                                getSystemService(Context.CLIPBOARD_SERVICE);
-                        // Creates a new text clip to put on the clipboard
-                        ClipData clip = ClipData.newPlainText("log", e.toString());
-                        if (clipboard != null) {
-                            clipboard.setPrimaryClip(clip);
-                        } else {
-                            Toast.makeText(MainActivity.this, getString(R.string.clip_error), Toast.LENGTH_LONG).show();
-                        }
-                    }).show();
+            new MaterialDialog.Builder(this).title(R.string.error).content(R.string.runtime_error_dialog_content)
+                    .positiveText(android.R.string.ok).neutralText(R.string.copy_log).onPositive((dialog, which) -> finish()).onNeutral((dialog, which) -> {
+                // Gets a handle to the clipboard service.
+                ClipboardManager clipboard = (ClipboardManager)
+                        getSystemService(Context.CLIPBOARD_SERVICE);
+                // Creates a new text clip to put on the clipboard
+                ClipData clip = ClipData.newPlainText("log", e.toString());
+                if (clipboard != null) clipboard.setPrimaryClip(clip);
+                else Toast.makeText(MainActivity.this, getString(R.string.clip_error), Toast.LENGTH_LONG).show();
+            }).show();
         }
     }
 
@@ -256,9 +236,7 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
     @Override
     public void onBackPressed() {
         if (settingsLayoutFragment.getVisibility() != View.VISIBLE) {
-            if (!webView.onBackPressed()) {
-                return;
-            }
+            if (!webView.onBackPressed()) return;
         } else {
             crossFade(settingsLayoutFragment, webContainer);
             if (webView != null && webView.getUrl().equals(APKMIRROR_UPLOAD_URL)) {
@@ -282,20 +260,14 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
     }
 
     private void search() {
-        new MaterialDialog.Builder(this)
-                .title(R.string.search)
-                .inputRange(1, 100)
-                .input(R.string.search, R.string.nothing, (dialog, input) -> {
-                })
+        new MaterialDialog.Builder(this).title(R.string.search).inputRange(1, 100).input(R.string.search, R.string.nothing, (dialog, input) -> {
+        })
                 .onPositive((dialog, which) -> {
-                    if (dialog.getInputEditText() != null) {
+                    if (dialog.getInputEditText() != null)
                         webView.loadUrl("https://www.apkmirror.com/?s=" + dialog.getInputEditText().getText());
-                    } else {
+                    else
                         Toast.makeText(MainActivity.this, getString(R.string.search_error), Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .negativeText(android.R.string.cancel)
-                .show();
+                }).negativeText(android.R.string.cancel).show();
     }
 
     /**
@@ -367,32 +339,22 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
     private void crossFade(final View toHide, View toShow) {
         toShow.setAlpha(0f);
         toShow.setVisibility(View.VISIBLE);
-        toShow.animate()
-                .alpha(1f)
-                .setDuration(shortAnimDuration)
-                .setListener(null);
-        toHide.animate()
-                .alpha(0f)
-                .setDuration(shortAnimDuration)
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        toHide.setVisibility(View.GONE);
-                    }
-                });
+        toShow.animate().alpha(1f).setDuration(shortAnimDuration).setListener(null);
+        toHide.animate().alpha(0f).setDuration(shortAnimDuration).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                toHide.setVisibility(View.GONE);
+            }
+        });
     }
 
     private void download(String url, String name) {
-
         if (!sharedPreferences.getBoolean("external_download", false)) {
-            if (AdvancedWebView.handleDownload(this, url, name)) {
+            if (AdvancedWebView.handleDownload(this, url, name))
                 Toast.makeText(MainActivity.this, getString(R.string.download_started), Toast.LENGTH_SHORT).show();
-            } else {
+            else
                 Toast.makeText(MainActivity.this, getString(R.string.cant_download), Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
-        }
+        } else startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
     }
 
     private boolean isWritePermissionGranted() {
@@ -402,9 +364,7 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
     @Override
     public void onProcessFinish(Integer themeColor) {
         // updating interface
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            changeUIColor(themeColor);
-        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) changeUIColor(themeColor);
         previsionThemeColor = themeColor;
     }
 
@@ -434,9 +394,7 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
             Color.colorToHSV(color, hsv);
             hsv[2] *= 0.8f;
             clr = Color.HSVToColor(hsv);
-        } else {
-            clr = Color.parseColor("#F47D20");
-        }
+        } else clr = Color.parseColor("#F47D20");
 
         Window window = MainActivity.this.getWindow();
         window.setStatusBarColor(clr);
@@ -478,72 +436,49 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
             }
 
             //Showing progress bar
-            progressBarContainer.animate()
-                    .alpha(1f)
-                    .setDuration(getResources().getInteger(android.R.integer.config_shortAnimTime))
-                    .setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationStart(Animator animation) {
-                            super.onAnimationStart(animation);
-                            progressBarContainer.setVisibility(View.VISIBLE);
-                        }
-                    });
+            progressBarContainer.animate().alpha(1f).setDuration(getResources().getInteger(android.R.integer.config_shortAnimTime)).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    super.onAnimationStart(animation);
+                    progressBarContainer.setVisibility(View.VISIBLE);
+                }
+            });
         }
     }
 
     @Override
     public void onPageFinished(String url) {
-        progressBarContainer.animate()
-                .alpha(0f)
-                .setDuration(getResources().getInteger(android.R.integer.config_longAnimTime))
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-                        progressBarContainer.setVisibility(View.GONE);
-                    }
-                });
+        progressBarContainer.animate().alpha(0f).setDuration(getResources().getInteger(android.R.integer.config_longAnimTime)).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                progressBarContainer.setVisibility(View.GONE);
+            }
+        });
 
-        if (refreshLayout.isRefreshing()) {
-            refreshLayout.setRefreshing(false);
-        }
-
+        if (refreshLayout.isRefreshing()) refreshLayout.setRefreshing(false);
     }
 
     @Override
     public void onPageError(int errorCode, String description, String failingUrl) {
         if (errorCode == -2) {
-            new MaterialDialog.Builder(this)
-                    .title(R.string.error)
-                    .content(getString(R.string.error_while_loading_page) + " " + failingUrl + "(" + errorCode + " " + description + ")")
-                    .positiveText(R.string.refresh)
-                    .negativeText(android.R.string.cancel)
-                    .neutralText("Dismiss")
-                    .onPositive((dialog, which) -> {
-                        webView.reload();
-                        dialog.dismiss();
-                    })
-                    .onNegative((dialog, which) -> finish())
-                    .onNeutral((materialDialog, dialogAction) -> materialDialog.dismiss())
-                    .show();
+            new MaterialDialog.Builder(this).title(R.string.error).content(getString(R.string.error_while_loading_page) + " " + failingUrl + "(" + errorCode + " " + description + ")")
+                    .positiveText(R.string.refresh).negativeText(android.R.string.cancel).neutralText("Dismiss").onPositive((dialog, which) -> {
+                webView.reload();
+                dialog.dismiss();
+            }).onNegative((dialog, which) -> finish()).onNeutral((materialDialog, dialogAction) -> materialDialog.dismiss()).show();
         }
 
     }
 
     @Override
     public void onDownloadRequested(String url, String suggestedFilename, String mimeType, long contentLength, String contentDisposition, String userAgent) {
-        if (isWritePermissionGranted()) {
-            download(url, suggestedFilename);
-        } else {
-            new MaterialDialog.Builder(MainActivity.this)
-                    .title(R.string.write_permission)
-                    .content(R.string.storage_access)
-                    .positiveText(R.string.request_permission)
-                    .negativeText(android.R.string.cancel)
+        if (isWritePermissionGranted()) download(url, suggestedFilename);
+        else
+            new MaterialDialog.Builder(MainActivity.this).title(R.string.write_permission).content(R.string.storage_access)
+                    .positiveText(R.string.request_permission).negativeText(android.R.string.cancel)
                     .onPositive((dialog, which) -> ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1))
                     .show();
-        }
-
     }
 
 

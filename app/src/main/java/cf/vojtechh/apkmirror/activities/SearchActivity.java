@@ -19,12 +19,8 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        new MaterialDialog.Builder(this)
-                .title(R.string.search)
-                .inputRange(1, 100)
-                .theme(Theme.LIGHT)
-                .negativeText(android.R.string.cancel)
-                .input(R.string.search, R.string.nothing, (dialog, input) -> {})
+        new MaterialDialog.Builder(this).title(R.string.search).inputRange(1, 100).theme(Theme.LIGHT)
+                .negativeText(android.R.string.cancel).input(R.string.search, R.string.nothing, (dialog, input) -> {})
                 .onPositive((dialog, which) -> {
                     Intent i = new Intent(SearchActivity.this, MainActivity.class);
                     if (dialog.getInputEditText() != null) {
@@ -34,8 +30,6 @@ public class SearchActivity extends AppCompatActivity {
                     }
                     startActivity(i);
                     finish();
-                })
-                .onNegative((dialog, which) -> finish())
-                .show();
+                }).onNegative((dialog, which) -> finish()).show();
     }
 }
