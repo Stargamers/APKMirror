@@ -267,7 +267,7 @@ class MainActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRespons
     private fun runAsync(url: String) {
         //getting apps
         val pageAsync = PageAsync()
-        pageAsync.response = this@MainActivity
+        pageAsync.response = this
         pageAsync.execute(url)
     }
 
@@ -322,10 +322,10 @@ class MainActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRespons
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
     }
 
-    override fun onProcessFinish(themeColor: Int?) {
+    override fun onProcessFinish(themeColor: Int) {
         // updating interface
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) changeUIColor(themeColor!!)
-        previsionThemeColor = themeColor!!
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) changeUIColor(themeColor)
+        previsionThemeColor = themeColor
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -351,7 +351,7 @@ class MainActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRespons
     private fun setSystemBarColor(color: Int) {
         val clr: Int
         //this makes the color darker or uses nicer orange color
-        if (color != previsionThemeColor) {
+        if (color != Color.parseColor("#FF8B14")) {
             val hsv = FloatArray(3)
             Color.colorToHSV(color, hsv)
             hsv[2] *= 0.8f
