@@ -9,6 +9,7 @@ android {
         targetSdkVersion 28
         versionName "3.5"
         versionCode 20180128
+        vectorDrawables.useSupportLibrary = true
     }
 
     lintOptions {
