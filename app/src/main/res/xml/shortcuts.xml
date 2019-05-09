@@ -2,14 +2,13 @@
 <shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
     <shortcut
         android:enabled="true"
-        android:icon="@drawable/ic_shortcut_file_upload_vector"
+        android:icon="@drawable/ic_shortcut_file_upload"
         android:shortcutId="shortcut_upload"
         android:shortcutShortLabel="@string/upload">
         <intent
             android:action="android.intent.action.VIEW"
             android:targetClass="cf.vojtechh.apkmirror.activities.MainActivity"
             android:targetPackage="cf.vojtechh.apkmirror">
-
             <extra
                 android:name="url"
                 android:value="http://www.apkmirror.com/apk-upload/" />
@@ -19,32 +18,27 @@
 
     <shortcut
         android:enabled="true"
-        android:icon="@drawable/ic_shortcut_search_vector"
+        android:icon="@drawable/ic_shortcut_search"
         android:shortcutId="shortcut_search"
         android:shortcutShortLabel="@string/search">
         <intent
             android:action="android.intent.action.VIEW"
             android:targetClass="cf.vojtechh.apkmirror.activities.SearchActivity"
-            android:targetPackage="cf.vojtechh.apkmirror">
-
-
-        </intent>
+            android:targetPackage="cf.vojtechh.apkmirror" />
     </shortcut>
 
     <shortcut
         android:enabled="true"
-        android:icon="@drawable/ic_shortcut_settings_vector"
+        android:icon="@drawable/ic_shortcut_settings"
         android:shortcutId="shortcut_settings"
         android:shortcutShortLabel="@string/settings">
         <intent
             android:action="android.intent.action.VIEW"
             android:targetClass="cf.vojtechh.apkmirror.activities.MainActivity"
             android:targetPackage="cf.vojtechh.apkmirror">
-
             <extra
                 android:name="url"
                 android:value="apkmirror://settings" />
-
         </intent>
     </shortcut>
 </shortcuts>
