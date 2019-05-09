@@ -36,6 +36,7 @@
             android:maxHeight="130dp"
             android:minWidth="130dp"
             android:minHeight="130dp"
+            android:contentDescription="@string/splash_image_desc"
             android:src="@drawable/splash_image" />
 
         <ProgressBar
@@ -122,7 +123,8 @@
             android:background="@color/colorPrimary"
             android:elevation="8dp"
             app:title="@string/settings"
-            app:titleTextColor="#FFFFFF" />
+            app:titleTextColor="#FFFFFF"
+            tools:targetApi="lollipop" />
 
         <fragment
             android:id="@+id/settings_fragment_main"

@@ -20,6 +20,7 @@
     <string name="search">Search</string>
     <string name="github" translatable="false">GitHub</string>
     <string name="about">About</string>
+    <string name="splash_image_desc">The Splash Image</string>
 
     <string name="fab_pref_summ">Disabling this will hide the search floating action button (restart is required in order to change this settings)</string>
     <string name="fab_pref">Show search FAB</string>
