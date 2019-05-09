@@ -2,12 +2,11 @@ package cf.vojtechh.apkmirror.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.Window;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.DialogAction;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
 
@@ -25,34 +24,18 @@ public class SearchActivity extends AppCompatActivity {
                 .inputRange(1, 100)
                 .theme(Theme.LIGHT)
                 .negativeText(android.R.string.cancel)
-                .input(R.string.search, R.string.nothing, new MaterialDialog.InputCallback() {
-                    @Override
-                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                .input(R.string.search, R.string.nothing, (dialog, input) -> {})
+                .onPositive((dialog, which) -> {
+                    Intent i = new Intent(SearchActivity.this, MainActivity.class);
+                    if (dialog.getInputEditText() != null) {
+                        i.putExtra("url", "http://www.apkmirror.com/?s=" + dialog.getInputEditText().getText());
+                    } else {
+                        Toast.makeText(SearchActivity.this, getString(R.string.search_error), Toast.LENGTH_SHORT).show();
                     }
+                    startActivity(i);
+                    finish();
                 })
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        Intent i = new Intent(SearchActivity.this, MainActivity.class);
-                        if(dialog.getInputEditText()!=null) {
-                            i.putExtra("url", "http://www.apkmirror.com/?s=" + dialog.getInputEditText().getText());
-                        }else {
-                            Toast.makeText(SearchActivity.this, getString(R.string.search_error), Toast.LENGTH_SHORT).show();
-                        }
-
-                        startActivity(i);
-                        finish();
-
-                    }
-                })
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        finish();
-                    }
-                })
+                .onNegative((dialog, which) -> finish())
                 .show();
     }
-
-
 }

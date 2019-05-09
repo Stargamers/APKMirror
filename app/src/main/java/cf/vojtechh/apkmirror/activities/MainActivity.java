@@ -24,14 +24,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import androidx.annotation.IdRes;
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.DecelerateInterpolator;
@@ -43,8 +35,15 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.DialogAction;
+import androidx.annotation.IdRes;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabReselectListener;
 import com.roughike.bottombar.OnTabSelectListener;
@@ -96,7 +95,8 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
             webContainer = findViewById(R.id.web_container);
             firstLoadingView = findViewById(R.id.first_loading_view);
             webView = findViewById(R.id.main_webview);
-            fabSearch = findViewById(R.id.fab_search);progressBarContainer = findViewById(R.id.main_progress_bar_container);
+            fabSearch = findViewById(R.id.fab_search);
+            progressBarContainer = findViewById(R.id.main_progress_bar_container);
             sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
             initSearchFab();
@@ -149,12 +149,9 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
             //I know not the best solution xD
             if (!settingsShortcut) {
                 firstLoadingView.setVisibility(View.VISIBLE);
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (firstLoadingView.getVisibility() == View.VISIBLE) {
-                            crossFade(firstLoadingView, webContainer);
-                        }
+                new Handler().postDelayed(() -> {
+                    if (firstLoadingView.getVisibility() == View.VISIBLE) {
+                        crossFade(firstLoadingView, webContainer);
                     }
                 }, 2000);
             }
@@ -164,27 +161,19 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
                     .content(R.string.runtime_error_dialog_content)
                     .positiveText(android.R.string.ok)
                     .neutralText(R.string.copy_log)
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                    @Override
-                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                        finish();
-                                    }
-                                }
-                    ).onNeutral(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    // Gets a handle to the clipboard service.
-                    ClipboardManager clipboard = (ClipboardManager)
-                            getSystemService(Context.CLIPBOARD_SERVICE);
-                    // Creates a new text clip to put on the clipboard
-                    ClipData clip = ClipData.newPlainText("log", e.toString());
-                    if (clipboard != null) {
-                        clipboard.setPrimaryClip(clip);
-                    }else{
-                        Toast.makeText(MainActivity.this, getString(R.string.clip_error), Toast.LENGTH_LONG).show();
-                    }
-                }
-            }).show();
+                    .onPositive((dialog, which) -> finish()
+                    ).onNeutral((dialog, which) -> {
+                        // Gets a handle to the clipboard service.
+                        ClipboardManager clipboard = (ClipboardManager)
+                                getSystemService(Context.CLIPBOARD_SERVICE);
+                        // Creates a new text clip to put on the clipboard
+                        ClipData clip = ClipData.newPlainText("log", e.toString());
+                        if (clipboard != null) {
+                            clipboard.setPrimaryClip(clip);
+                        } else {
+                            Toast.makeText(MainActivity.this, getString(R.string.clip_error), Toast.LENGTH_LONG).show();
+                        }
+                    }).show();
         }
     }
 
@@ -200,18 +189,12 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
     }
 
     private void initSearchFab() {
-        Boolean fab = sharedPreferences.getBoolean("fab", true);
+        boolean fab = sharedPreferences.getBoolean("fab", true);
         if (fab) {
             fabSearch.show();
-            fabSearch.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    search();
-                }
-            });
+            fabSearch.setOnClickListener(v -> search());
         }
     }
-
 
 
     private void initWebView(String url) {
@@ -220,12 +203,7 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
         webView.setWebChromeClient(chromeClient);
         webView.setUploadableFileTypes("application/vnd.android.package-archive");
         webView.loadUrl(url);
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                webView.reload();
-            }
-        });
+        refreshLayout.setOnRefreshListener(() -> webView.reload());
     }
 
 
@@ -307,19 +285,13 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
         new MaterialDialog.Builder(this)
                 .title(R.string.search)
                 .inputRange(1, 100)
-                .input(R.string.search, R.string.nothing, new MaterialDialog.InputCallback() {
-                    @Override
-                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
-                    }
+                .input(R.string.search, R.string.nothing, (dialog, input) -> {
                 })
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        if(dialog.getInputEditText()!=null) {
-                            webView.loadUrl("http://www.apkmirror.com/?s=" + dialog.getInputEditText().getText());
-                        }else {
-                            Toast.makeText(MainActivity.this, getString(R.string.search_error), Toast.LENGTH_SHORT).show();
-                        }
+                .onPositive((dialog, which) -> {
+                    if (dialog.getInputEditText() != null) {
+                        webView.loadUrl("http://www.apkmirror.com/?s=" + dialog.getInputEditText().getText());
+                    } else {
+                        Toast.makeText(MainActivity.this, getString(R.string.search_error), Toast.LENGTH_SHORT).show();
                     }
                 })
                 .negativeText(android.R.string.cancel)
@@ -329,7 +301,7 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
     private OnTabReselectListener tabReselectListener = new OnTabReselectListener() {
         @Override
         public void onTabReSelected(@IdRes int tabId) {
-            Integer webScrollY = webView.getScrollY();
+            int webScrollY = webView.getScrollY();
             if (tabId == R.id.navigation_home) {
                 //Home re-pressed
                 if (webScrollY != 0) {
@@ -453,15 +425,12 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
     private void changeUIColor(Integer color) {
         ValueAnimator anim = ValueAnimator.ofArgb(previsionThemeColor, color);
         anim.setEvaluator(new ArgbEvaluator());
-        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                progressBar.getProgressDrawable().setColorFilter(new LightingColorFilter(0xFF000000, (Integer) valueAnimator.getAnimatedValue()));
-                setSystemBarColor((Integer) valueAnimator.getAnimatedValue());
-                navigation.setActiveTabColor((Integer) valueAnimator.getAnimatedValue());
-                fabSearch.setBackgroundTintList(ColorStateList.valueOf((Integer) valueAnimator.getAnimatedValue()));
+        anim.addUpdateListener(valueAnimator -> {
+            progressBar.getProgressDrawable().setColorFilter(new LightingColorFilter(0xFF000000, (Integer) valueAnimator.getAnimatedValue()));
+            setSystemBarColor((Integer) valueAnimator.getAnimatedValue());
+            navigation.setActiveTabColor((Integer) valueAnimator.getAnimatedValue());
+            fabSearch.setBackgroundTintList(ColorStateList.valueOf((Integer) valueAnimator.getAnimatedValue()));
 
-            }
         });
         anim.setDuration(getResources().getInteger(android.R.integer.config_shortAnimTime));
         anim.start();
@@ -563,29 +532,16 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
         if (errorCode == -2) {
             new MaterialDialog.Builder(this)
                     .title(R.string.error)
-                    .content(getString(R.string.error_while_loading_page) + " " + failingUrl + "(" + String.valueOf(errorCode) + " " + description + ")")
+                    .content(getString(R.string.error_while_loading_page) + " " + failingUrl + "(" + errorCode + " " + description + ")")
                     .positiveText(R.string.refresh)
                     .negativeText(android.R.string.cancel)
                     .neutralText("Dismiss")
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            webView.reload();
-                            dialog.dismiss();
-                        }
+                    .onPositive((dialog, which) -> {
+                        webView.reload();
+                        dialog.dismiss();
                     })
-                    .onNegative(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            finish();
-                        }
-                    })
-                    .onNeutral(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
-                            materialDialog.dismiss();
-                        }
-                    })
+                    .onNegative((dialog, which) -> finish())
+                    .onNeutral((materialDialog, dialogAction) -> materialDialog.dismiss())
                     .show();
         }
 
@@ -601,13 +557,7 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
                     .content(R.string.storage_access)
                     .positiveText(R.string.request_permission)
                     .negativeText(android.R.string.cancel)
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            //Request permission
-                            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-                        }
-                    })
+                    .onPositive((dialog, which) -> ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1))
                     .show();
         }
 
@@ -621,7 +571,6 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
     }
 
     private WebChromeClient chromeClient = new WebChromeClient() {
-
         @Override
         public void onProgressChanged(WebView view, int progress) {
             //update the progressbar value
@@ -629,9 +578,7 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
             animation.setDuration(100); // 0.5 second
             animation.setInterpolator(new DecelerateInterpolator());
             animation.start();
-
         }
-
     };
 
 }
