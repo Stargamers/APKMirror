@@ -24,6 +24,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.DecelerateInterpolator;
@@ -35,7 +36,8 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -43,11 +45,10 @@ import androidx.core.content.ContextCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.roughike.bottombar.BottomBar;
-import com.roughike.bottombar.OnTabReselectListener;
-import com.roughike.bottombar.OnTabSelectListener;
 
+import cf.vojtechh.apkmirror.BuildConfig;
 import cf.vojtechh.apkmirror.R;
 import cf.vojtechh.apkmirror.classes.PageAsync;
 import cf.vojtechh.apkmirror.interfaces.AsyncResponse;
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
 
     private AdvancedWebView webView;
     private ProgressBar progressBar;
-    private BottomBar navigation;
+    private BottomNavigationView navigation;
     private FloatingActionButton fabSearch;
 
     private SwipeRefreshLayout refreshLayout;
@@ -127,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
                         if (bundleUrl.equals("apkmirror://settings")) {
                             //It was settings
                             url = APKMIRROR_URL;
-                            navigation.selectTabWithId(R.id.navigation_settings);
+                            navigation.setSelectedItemId(R.id.navigation_settings);
                             crossFade(webContainer, settingsLayoutFragment);
                             settingsShortcut = true;
                         } else url = bundleUrl;
@@ -144,6 +145,7 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
                 new Handler().postDelayed(() -> { if (firstLoadingView.getVisibility() == View.VISIBLE) crossFade(firstLoadingView, webContainer); }, 2000);
             }
         } catch (final RuntimeException e) {
+            if (BuildConfig.DEBUG) e.printStackTrace();
             new MaterialDialog.Builder(this).title(R.string.error).content(R.string.runtime_error_dialog_content)
                     .positiveText(android.R.string.ok).neutralText(R.string.copy_log).onPositive((dialog, which) -> finish()).onNeutral((dialog, which) -> {
                 // Gets a handle to the clipboard service.
@@ -159,11 +161,11 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
 
     private void initNavigation() {
         //Making the bottom navigation do something
-        navigation.setOnTabSelectListener(tabSelectListener);
-        navigation.setOnTabReselectListener(tabReselectListener);
+        navigation.setOnNavigationItemSelectedListener(tabSelectListener);
+        navigation.setOnNavigationItemReselectedListener(tabReselectListener);
 
         if (sharedPreferences.getBoolean("show_exit", false)) {
-            navigation.setItems(R.xml.navigation_exit);
+            navigation.inflateMenu(R.menu.navigation_exit);
             navigation.invalidate();
         }
     }
@@ -185,7 +187,6 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
         webView.loadUrl(url);
         refreshLayout.setOnRefreshListener(() -> webView.reload());
     }
-
 
     @Override
     protected void onResume() {
@@ -241,10 +242,10 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
             crossFade(settingsLayoutFragment, webContainer);
             if (webView != null && webView.getUrl().equals(APKMIRROR_UPLOAD_URL)) {
                 triggerAction = false;
-                navigation.selectTabWithId(R.id.navigation_upload);
+                navigation.setSelectedItemId(R.id.navigation_upload);
             } else {
                 triggerAction = false;
-                navigation.selectTabWithId(R.id.navigation_home);
+                navigation.setSelectedItemId(R.id.navigation_home);
             }
             return;
         }
@@ -273,66 +274,49 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
     /**
      * Listens for user clicking on the tab again. We first check if the page is scrolled. If so we move to top, otherwise we refresh the page
      */
-    private OnTabReselectListener tabReselectListener = tabId -> {
-        if (tabId == R.id.navigation_home) scrollOrReload(APKMIRROR_URL);
-        else if (tabId == R.id.navigation_upload) scrollOrReload(APKMIRROR_UPLOAD_URL);
-    };
+    private BottomNavigationView.OnNavigationItemReselectedListener tabReselectListener = menuItem -> scrollOrReload((menuItem.getItemId() == R.id.navigation_home) ? APKMIRROR_URL : (menuItem.getItemId() == R.id.navigation_upload) ? APKMIRROR_UPLOAD_URL : null);
 
-    private void scrollOrReload(String url) {
+    private void scrollOrReload(@Nullable String url) {
+        if (url == null) return;
         if (webView.getScrollY() != 0) webView.setScrollY(0);
         else webView.loadUrl(url);
     }
 
-    private OnTabSelectListener tabSelectListener = new OnTabSelectListener() {
+    private BottomNavigationView.OnNavigationItemSelectedListener tabSelectListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
-        public void onTabSelected(@IdRes int tabId) {
+        public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
             if (triggerAction) {
-                if (tabId == R.id.navigation_home) {
-                    //Home pressed
-                    if (settingsLayoutFragment.getVisibility() != View.VISIBLE) {
-                        //settings is not visible
-                        //Load url
-                        webView.loadUrl(APKMIRROR_URL);
-                    } else {
-                        //settings is visible, gonna hide it
-                        if (webView.getUrl().equals(APKMIRROR_UPLOAD_URL)) {
-                            webView.loadUrl(APKMIRROR_URL);
+                switch (menuItem.getItemId()) {
+                    case R.id.navigation_home: //Home pressed
+                        if (settingsLayoutFragment.getVisibility() != View.VISIBLE) webView.loadUrl(APKMIRROR_URL); //settings is not visible, Load url
+                        else {
+                            //settings is visible, gonna hide it
+                            if (webView.getUrl().equals(APKMIRROR_UPLOAD_URL)) webView.loadUrl(APKMIRROR_URL);
+                            crossFade(settingsLayoutFragment, webContainer);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) changeUIColor(previsionThemeColor);
                         }
-                        crossFade(settingsLayoutFragment, webContainer);
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            changeUIColor(previsionThemeColor);
+                        break;
+                    case R.id.navigation_upload: //Upload pressed
+                        if (settingsLayoutFragment.getVisibility() != View.VISIBLE) webView.loadUrl(APKMIRROR_UPLOAD_URL); //settings is not visible, Load url
+                        else {
+                            //settings is visible, gonna hide it
+                            if (!webView.getUrl().equals(APKMIRROR_UPLOAD_URL)) webView.loadUrl(APKMIRROR_UPLOAD_URL);
+                            crossFade(settingsLayoutFragment, webContainer);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) changeUIColor(previsionThemeColor);
                         }
-                    }
-                } else if (tabId == R.id.navigation_upload) {
-                    //Upload pressed
-                    if (settingsLayoutFragment.getVisibility() != View.VISIBLE) {
-                        //settings is not visible
-                        //Load url
-                        webView.loadUrl(APKMIRROR_UPLOAD_URL);
-                    } else {
-                        //settings is visible, gonna hide it
-                        if (!webView.getUrl().equals(APKMIRROR_UPLOAD_URL)) {
-                            webView.loadUrl(APKMIRROR_UPLOAD_URL);
-                        }
-                        crossFade(settingsLayoutFragment, webContainer);
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            changeUIColor(previsionThemeColor);
-                        }
-                    }
-                } else if (tabId == R.id.navigation_settings) {
-                    //Settings pressed
-                    if (firstLoadingView.getVisibility() == View.VISIBLE) {
-                        firstLoadingView.setVisibility(View.GONE);
-                    }
-                    crossFade(webContainer, settingsLayoutFragment);
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        changeUIColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
-                    }
-                } else if (tabId == R.id.navigation_exit) {
-                    finish();
+                        break;
+                    case R.id.navigation_settings: //Settings pressed
+                        if (firstLoadingView.getVisibility() == View.VISIBLE) firstLoadingView.setVisibility(View.GONE);
+                        crossFade(webContainer, settingsLayoutFragment);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) changeUIColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
+                        break;
+                    case R.id.navigation_exit:
+                        finish();
+                        break;
                 }
             }
             triggerAction = true;
+            return true;
         }
     };
 
@@ -375,7 +359,8 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
         anim.addUpdateListener(valueAnimator -> {
             progressBar.getProgressDrawable().setColorFilter(new LightingColorFilter(0xFF000000, (Integer) valueAnimator.getAnimatedValue()));
             setSystemBarColor((Integer) valueAnimator.getAnimatedValue());
-            navigation.setActiveTabColor((Integer) valueAnimator.getAnimatedValue());
+            navigation.setItemTextColor(ColorStateList.valueOf((Integer) valueAnimator.getAnimatedValue()));
+            navigation.setItemIconTintList(ColorStateList.valueOf((Integer) valueAnimator.getAnimatedValue()));
             fabSearch.setBackgroundTintList(ColorStateList.valueOf((Integer) valueAnimator.getAnimatedValue()));
 
         });
@@ -422,15 +407,15 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
             setupNFC(url);
 
             //Updating bottom navigation
-            if (navigation.getCurrentTabId() == R.id.navigation_home) {
+            if (navigation.getSelectedItemId() == R.id.navigation_home) {
                 if (url.equals(APKMIRROR_UPLOAD_URL)) {
                     triggerAction = false;
-                    navigation.selectTabWithId(R.id.navigation_upload);
+                    navigation.setSelectedItemId(R.id.navigation_upload);
                 }
-            } else if (navigation.getCurrentTabId() == R.id.navigation_upload) {
+            } else if (navigation.getSelectedItemId() == R.id.navigation_upload) {
                 if (!url.equals(APKMIRROR_UPLOAD_URL)) {
                     triggerAction = false;
-                    navigation.selectTabWithId(R.id.navigation_home);
+                    navigation.setSelectedItemId(R.id.navigation_home);
 
                 }
             }

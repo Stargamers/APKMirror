@@ -7,14 +7,15 @@
     android:layout_height="match_parent"
     tools:context="cf.vojtechh.apkmirror.activities.MainActivity">
 
-
-    <com.roughike.bottombar.BottomBar
+    <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navigation"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
-        app:bb_showShadow="true"
-        app:bb_tabXmlResource="@xml/navigation" />
+        app:itemBackground="@color/white"
+        app:itemIconTint="@drawable/bottom_bar_selector"
+        app:itemTextColor="@drawable/bottom_bar_selector"
+        app:menu="@menu/navigation" />
 
     <LinearLayout
         android:id="@+id/first_loading_view"
@@ -53,7 +54,7 @@
         android:layout_above="@id/navigation"
         android:visibility="gone">
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/refresh_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
