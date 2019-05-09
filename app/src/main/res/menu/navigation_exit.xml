@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/navigation_exit"
-        android:enabled="true"
         android:icon="@drawable/ic_exit_to_app_black_24dp"
         android:title="@string/exit"
         app:showAsAction="ifRoom" />

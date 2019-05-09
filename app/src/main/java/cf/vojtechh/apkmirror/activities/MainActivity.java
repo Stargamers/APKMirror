@@ -360,6 +360,7 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
             progressBar.getProgressDrawable().setColorFilter(new LightingColorFilter(0xFF000000, (Integer) valueAnimator.getAnimatedValue()));
             setSystemBarColor((Integer) valueAnimator.getAnimatedValue());
             navigation.setItemTextColor(ColorStateList.valueOf((Integer) valueAnimator.getAnimatedValue()));
+            navigation.setItemIconTintList(ColorStateList.valueOf((Integer) valueAnimator.getAnimatedValue()));
             fabSearch.setBackgroundTintList(ColorStateList.valueOf((Integer) valueAnimator.getAnimatedValue()));
 
         });
