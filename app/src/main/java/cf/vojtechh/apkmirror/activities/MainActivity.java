@@ -86,8 +86,6 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
             setTheme(R.style.AppTheme);
             setContentView(R.layout.activity_main);
 
-            previsionThemeColor = Color.parseColor("#FF8B14");
-
             //Views
             refreshLayout = findViewById(R.id.refresh_layout);
             progressBar = findViewById(R.id.main_progress_bar);
@@ -142,7 +140,10 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
             //I know not the best solution xD
             if (!settingsShortcut) {
                 firstLoadingView.setVisibility(View.VISIBLE);
-                new Handler().postDelayed(() -> { if (firstLoadingView.getVisibility() == View.VISIBLE) crossFade(firstLoadingView, webContainer); }, 2000);
+                new Handler().postDelayed(() -> {
+                    if (firstLoadingView.getVisibility() == View.VISIBLE)
+                        crossFade(firstLoadingView, webContainer);
+                }, 2000);
             }
         } catch (final RuntimeException e) {
             if (BuildConfig.DEBUG) e.printStackTrace();
@@ -154,7 +155,8 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
                 // Creates a new text clip to put on the clipboard
                 ClipData clip = ClipData.newPlainText("log", e.toString());
                 if (clipboard != null) clipboard.setPrimaryClip(clip);
-                else Toast.makeText(MainActivity.this, getString(R.string.clip_error), Toast.LENGTH_LONG).show();
+                else
+                    Toast.makeText(MainActivity.this, getString(R.string.clip_error), Toast.LENGTH_LONG).show();
             }).show();
         }
     }
@@ -260,13 +262,12 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
 
     private void search() {
         new MaterialDialog.Builder(this).title(R.string.search).inputRange(1, 100).input(R.string.search, R.string.nothing, (dialog, input) -> {
-        })
-                .onPositive((dialog, which) -> {
-                    if (dialog.getInputEditText() != null)
-                        webView.loadUrl("https://www.apkmirror.com/?s=" + dialog.getInputEditText().getText());
-                    else
-                        Toast.makeText(MainActivity.this, getString(R.string.search_error), Toast.LENGTH_SHORT).show();
-                }).negativeText(android.R.string.cancel).show();
+        }).onPositive((dialog, which) -> {
+            if (dialog.getInputEditText() != null)
+                webView.loadUrl("https://www.apkmirror.com/?s=" + dialog.getInputEditText().getText());
+            else
+                Toast.makeText(MainActivity.this, getString(R.string.search_error), Toast.LENGTH_SHORT).show();
+        }).negativeText(android.R.string.cancel).show();
     }
 
     /**
@@ -286,27 +287,35 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
             if (triggerAction) {
                 switch (menuItem.getItemId()) {
                     case R.id.navigation_home: //Home pressed
-                        if (settingsLayoutFragment.getVisibility() != View.VISIBLE) webView.loadUrl(APKMIRROR_URL); //settings is not visible, Load url
+                        if (settingsLayoutFragment.getVisibility() != View.VISIBLE)
+                            webView.loadUrl(APKMIRROR_URL); //settings is not visible, Load url
                         else {
                             //settings is visible, gonna hide it
-                            if (webView.getUrl().equals(APKMIRROR_UPLOAD_URL)) webView.loadUrl(APKMIRROR_URL);
+                            if (webView.getUrl().equals(APKMIRROR_UPLOAD_URL))
+                                webView.loadUrl(APKMIRROR_URL);
                             crossFade(settingsLayoutFragment, webContainer);
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) changeUIColor(previsionThemeColor);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                                changeUIColor(previsionThemeColor);
                         }
                         break;
                     case R.id.navigation_upload: //Upload pressed
-                        if (settingsLayoutFragment.getVisibility() != View.VISIBLE) webView.loadUrl(APKMIRROR_UPLOAD_URL); //settings is not visible, Load url
+                        if (settingsLayoutFragment.getVisibility() != View.VISIBLE)
+                            webView.loadUrl(APKMIRROR_UPLOAD_URL); //settings is not visible, Load url
                         else {
                             //settings is visible, gonna hide it
-                            if (!webView.getUrl().equals(APKMIRROR_UPLOAD_URL)) webView.loadUrl(APKMIRROR_UPLOAD_URL);
+                            if (!webView.getUrl().equals(APKMIRROR_UPLOAD_URL))
+                                webView.loadUrl(APKMIRROR_UPLOAD_URL);
                             crossFade(settingsLayoutFragment, webContainer);
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) changeUIColor(previsionThemeColor);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                                changeUIColor(previsionThemeColor);
                         }
                         break;
                     case R.id.navigation_settings: //Settings pressed
-                        if (firstLoadingView.getVisibility() == View.VISIBLE) firstLoadingView.setVisibility(View.GONE);
+                        if (firstLoadingView.getVisibility() == View.VISIBLE)
+                            firstLoadingView.setVisibility(View.GONE);
                         crossFade(webContainer, settingsLayoutFragment);
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) changeUIColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                            changeUIColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
                         break;
                     case R.id.navigation_exit:
                         finish();
@@ -350,6 +359,8 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
         previsionThemeColor = themeColor;
     }
 
+    private static final int[][] COLOR_STATES = new int[][]{new int[]{android.R.attr.state_checked}, new int[]{-android.R.attr.state_checked}};
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void changeUIColor(Integer color) {
         ValueAnimator anim = ValueAnimator.ofArgb(previsionThemeColor, color);
@@ -358,7 +369,7 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
             progressBar.getProgressDrawable().setColorFilter(new LightingColorFilter(0xFF000000, (Integer) valueAnimator.getAnimatedValue()));
             setSystemBarColor((Integer) valueAnimator.getAnimatedValue());
             navigation.setItemTextColor(ColorStateList.valueOf((Integer) valueAnimator.getAnimatedValue()));
-            navigation.setItemIconTintList(ColorStateList.valueOf((Integer) valueAnimator.getAnimatedValue()));
+            navigation.setItemIconTintList(new ColorStateList(COLOR_STATES, new int[]{(int) valueAnimator.getAnimatedValue(), R.color.inactive}));
             fabSearch.setBackgroundTintList(ColorStateList.valueOf((Integer) valueAnimator.getAnimatedValue()));
 
         });
@@ -372,7 +383,7 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
     private void setSystemBarColor(int color) {
         int clr;
         //this makes the color darker or uses nicer orange color
-        if (color != Color.parseColor("#FF8B14")) {
+        if (color != previsionThemeColor) {
             float[] hsv = new float[3];
             Color.colorToHSV(color, hsv);
             hsv[2] *= 0.8f;

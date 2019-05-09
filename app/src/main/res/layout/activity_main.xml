@@ -13,8 +13,8 @@
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
         app:itemBackground="@color/white"
-        app:itemIconTint="@drawable/bottom_bar_selector"
-        app:itemTextColor="@drawable/bottom_bar_selector"
+        app:itemIconTint="@color/bottom_bar_selector"
+        app:itemTextColor="@color/bottom_bar_selector"
         app:menu="@menu/navigation" />
 
     <LinearLayout
