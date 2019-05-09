@@ -59,6 +59,9 @@
         android:summary="@string/nin_thx"
         android:title="Ninnix96" />
     <Preference
+        android:summary="@string/ita_thx"
+        android:title="Itachi1706" />
+    <Preference
         android:summary="@string/azalel_thx"
         android:title="Sandro Azalel" />
     <Preference
