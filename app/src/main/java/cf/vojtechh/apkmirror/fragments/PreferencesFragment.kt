@@ -18,13 +18,13 @@ class PreferencesFragment : PreferenceFragment() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences)
 
-        findPreference("github").setOnPreferenceClickListener {
+        findPreference("apkmirror_github").setOnPreferenceClickListener {
             val githubIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/itachi1706/APKMirror"))
             startActivity(githubIntent)
             true
         }
 
-        findPreference("libs").setOnPreferenceClickListener {
+        findPreference("apkmirror_libs").setOnPreferenceClickListener {
             val notices = Notices()
             notices.addNotice(Notice("jsoup: Java HTML Parser", "https://github.com/jhy/jsoup/", "Jonathan Hedley (jonathan@hedley.net)", MITLicense()))
             notices.addNotice(Notice("AndroidX Jetpack Support Libraries", "https://developer.android.com/jetpack/androidx", "Copyright (c) 2011 The Android Open Source Project", ApacheSoftwareLicense20()))

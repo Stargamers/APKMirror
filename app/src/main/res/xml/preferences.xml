@@ -5,30 +5,30 @@
 
     <SwitchPreference
         android:defaultValue="true"
-        android:key="fab"
+        android:key="apkmirror_hidefab"
         android:summary="@string/fab_pref_summ"
         android:title="@string/fab_pref" />
 
     <SwitchPreference
         android:defaultValue="false"
-        android:key="save_url"
+        android:key="apkmirror_save_url"
         android:title="@string/save_url_pref" />
 
     <SwitchPreference
         android:defaultValue="false"
-        android:key="external_download"
+        android:key="apkmirror_external_download"
         android:summary="@string/external_download_summ"
         android:title="@string/external_download_pref" />
 
     <PreferenceCategory android:title="@string/about" />
 
     <Preference
-        android:key="github"
+        android:key="apkmirror_github"
         android:summary="@string/github_summ"
         android:title="@string/github" />
 
     <Preference
-        android:key="libs"
+        android:key="apkmirror_libs"
         android:summary="@string/lib_summ"
         android:title="@string/libraries" />
 

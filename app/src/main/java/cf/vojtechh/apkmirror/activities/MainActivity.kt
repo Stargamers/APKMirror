@@ -126,7 +126,7 @@ class MainActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRespons
 
             initNavigation()
 
-            val saveUrl = sharedPreferences!!.getBoolean("save_url", false)
+            val saveUrl = sharedPreferences!!.getBoolean("apkmirror_save_url", false)
             val url: String
             val link = intent
             val data = link.data
@@ -139,7 +139,7 @@ class MainActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRespons
                 if (bundle == null) {
                     //Normal start from launcher
                     url = if (saveUrl)
-                        sharedPreferences!!.getString("last_url", APKMIRROR_URL)!!
+                        sharedPreferences!!.getString("apkmirror_last_url", APKMIRROR_URL)!!
                     else
                         APKMIRROR_URL
                 } else {
@@ -156,7 +156,7 @@ class MainActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRespons
                             url = bundleUrl
                     } else {
                         url = if (saveUrl)
-                            sharedPreferences!!.getString("last_url", APKMIRROR_URL)!!
+                            sharedPreferences!!.getString("apkmirror_last_url", APKMIRROR_URL)!!
                         else
                             APKMIRROR_URL
                     }
@@ -191,7 +191,7 @@ class MainActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRespons
     }
 
     private fun initSearchFab() {
-        val fab = sharedPreferences!!.getBoolean("fab", true)
+        val fab = sharedPreferences!!.getBoolean("apkmirror_hidefab", true)
         if (fab) {
             fabSearch!!.show()
             fabSearch!!.setOnClickListener { search() }
@@ -224,8 +224,8 @@ class MainActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRespons
     }
 
     override fun onStop() {
-        if (sharedPreferences!!.getBoolean("save_url", false) && webView!!.url != "apkmirror://settings")
-            sharedPreferences!!.edit().putString("last_url", webView!!.url).apply()
+        if (sharedPreferences!!.getBoolean("apkmirror_save_url", false) && webView!!.url != "apkmirror://settings")
+            sharedPreferences!!.edit().putString("apkmirror_last_url", webView!!.url).apply()
         super.onStop()
     }
 
@@ -311,7 +311,7 @@ class MainActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRespons
     }
 
     private fun download(url: String, name: String) {
-        if (!sharedPreferences!!.getBoolean("external_download", false)) {
+        if (!sharedPreferences!!.getBoolean("apkmirror_external_download", false)) {
             if (AdvancedWebView.handleDownload(this, url, name))
                 Toast.makeText(this@MainActivity, getString(R.string.download_started), Toast.LENGTH_SHORT).show()
             else
