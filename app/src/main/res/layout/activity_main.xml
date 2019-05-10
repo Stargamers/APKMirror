@@ -101,7 +101,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
             android:layout_margin="4dp"
-            app:srcCompat="@drawable/ic_search_black_24dp"
+            app:srcCompat="@drawable/ic_search"
             android:tint="#FFFFFF"
             android:visibility="gone"
             app:fabSize="normal"
