@@ -53,46 +53,10 @@
         android:summary="@string/ja_som_thx"
         android:title="ja_som" />
     <Preference
-        android:summary="@string/fast0n_thx"
-        android:title="Fast0n" />
-    <Preference
         android:summary="@string/nin_thx"
         android:title="Ninnix96" />
     <Preference
         android:summary="@string/ita_thx"
         android:title="Itachi1706" />
-    <Preference
-        android:summary="@string/azalel_thx"
-        android:title="Sandro Azalel" />
-    <Preference
-        android:summary="@string/tim_thx"
-        android:title="TimSchumi" />
-    <Preference
-        android:summary="@string/berkantkz_thx"
-        android:title="Berkant Korkmaz" />
-    <Preference
-        android:summary="@string/hbbxmjbb_thx"
-        android:title="hbbxmjbb" />
-    <Preference
-        android:summary="@string/hbbxmjbb_thx"
-        android:title="io_gh0st" />
-    <Preference
-        android:summary="@string/nightstorm8x"
-        android:title="nightstorm8x" />
-    <Preference
-        android:summary="@string/fonodosebas"
-        android:title="FonoDoSebas" />
-    <Preference
-        android:summary="@string/josefill"
-        android:title="József Illés" />
-    <Preference
-        android:summary="@string/xx6600xx"
-        android:title="xx6600xx" />
-    <Preference
-        android:summary="@string/vladandroidgamer"
-        android:title="VladAndroidGamer" />
-    <Preference
-        android:summary="@string/radeox_thx"
-        android:title="Radeox" />
 
 </PreferenceScreen>
