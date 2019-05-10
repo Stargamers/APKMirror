@@ -191,11 +191,8 @@ class MainActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRespons
     }
 
     private fun initSearchFab() {
-        val fab = sharedPreferences!!.getBoolean("apkmirror_hidefab", true)
-        if (fab) {
-            fabSearch!!.show()
-            fabSearch!!.setOnClickListener { search() }
-        }
+        fabSearch!!.show()
+        fabSearch!!.setOnClickListener { search() }
     }
 
 

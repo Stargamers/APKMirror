@@ -4,12 +4,6 @@
     <PreferenceCategory android:title="@string/settings" />
 
     <SwitchPreference
-        android:defaultValue="true"
-        android:key="apkmirror_hidefab"
-        android:summary="@string/fab_pref_summ"
-        android:title="@string/fab_pref" />
-
-    <SwitchPreference
         android:defaultValue="false"
         android:key="apkmirror_save_url"
         android:title="@string/save_url_pref" />
@@ -33,13 +27,10 @@
         android:title="@string/libraries" />
 
 
-    <PreferenceCategory android:title="@string/with_thanks" >
+    <PreferenceCategory android:title="@string/with_thanks">
         <Preference
         android:summary="@string/evo_thx"
         android:title="EvoWizz" />
-        <Preference
-            android:summary="@string/ja_som_thx"
-            android:title="ja_som" />
         <Preference
             android:summary="@string/nin_thx"
             android:title="Ninnix96" />
