@@ -430,7 +430,6 @@ class MainActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRespons
                         dialog.dismiss()
                     }.onNegative { _, _ -> finish() }.onNeutral { materialDialog, _ -> materialDialog.dismiss() }.show()
         }
-
     }
 
     override fun onDownloadRequested(url: String, suggestedFilename: String, mimeType: String, contentLength: Long, contentDisposition: String, userAgent: String) {
