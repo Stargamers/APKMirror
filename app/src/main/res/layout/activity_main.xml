@@ -121,7 +121,7 @@
             android:id="@+id/settings_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
+            android:background="@color/apkmirrorPrimary"
             android:elevation="8dp"
             app:title="@string/settings"
             app:titleTextColor="#FFFFFF"

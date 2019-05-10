@@ -80,7 +80,7 @@ class MainActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRespons
                         firstLoadingView!!.visibility = View.GONE
                     crossFade(webContainer!!, settingsLayoutFragment!!)
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                        changeUIColor(ContextCompat.getColor(this@MainActivity, R.color.colorPrimary))
+                        changeUIColor(ContextCompat.getColor(this@MainActivity, R.color.apkmirrorPrimary))
                 }
                 R.id.navigation_exit -> finish()
             }
@@ -338,7 +338,7 @@ class MainActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRespons
         anim.addUpdateListener { valueAnimator ->
             progressBar!!.progressDrawable.colorFilter = LightingColorFilter(-0x1000000, valueAnimator.animatedValue as Int)
             setSystemBarColor(valueAnimator.animatedValue as Int)
-            val toUpdate = ColorStateList(COLOR_STATES, intArrayOf(valueAnimator.animatedValue as Int, R.color.inactive))
+            val toUpdate = ColorStateList(COLOR_STATES, intArrayOf(valueAnimator.animatedValue as Int, R.color.inactive_tabs))
             navigation!!.itemTextColor = toUpdate
             navigation!!.itemIconTintList = toUpdate
             fabSearch!!.backgroundTintList = ColorStateList.valueOf(valueAnimator.animatedValue as Int)
