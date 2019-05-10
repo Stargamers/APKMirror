@@ -188,11 +188,6 @@ class MainActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRespons
         //Making the bottom navigation do something
         navigation!!.setOnNavigationItemSelectedListener(tabSelectListener)
         navigation!!.setOnNavigationItemReselectedListener(tabReselectListener)
-
-        if (sharedPreferences!!.getBoolean("show_exit", false)) {
-            navigation!!.inflateMenu(R.menu.navigation_exit)
-            navigation!!.invalidate()
-        }
     }
 
     private fun initSearchFab() {
