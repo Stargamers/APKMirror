@@ -19,7 +19,7 @@ class PreferencesFragment : PreferenceFragment() {
         addPreferencesFromResource(R.xml.preferences)
 
         findPreference("github").setOnPreferenceClickListener {
-            val githubIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/vojta-horanek/APKMirror"))
+            val githubIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/itachi1706/APKMirror"))
             startActivity(githubIntent)
             true
         }
@@ -34,13 +34,6 @@ class PreferencesFragment : PreferenceFragment() {
             LicensesDialog.Builder(activity).setNotices(notices).setTitle(getString(R.string.libraries)).build().show()
             true
         }
-
-        findPreference("xda").setOnPreferenceClickListener {
-            val threadIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://forum.xda-developers.com/android/apps-games/apkmirror-web-app-t3450564"))
-            startActivity(threadIntent)
-            true
-        }
-
     }
 
 }

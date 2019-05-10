@@ -38,25 +38,22 @@
         android:summary="@string/lib_summ"
         android:title="@string/libraries" />
 
-    <Preference
-        android:key="xda"
-        android:summary="@string/xda_summ"
-        android:title="@string/thread" />
 
-
-    <PreferenceCategory android:title="@string/with_thanks" />
-
-    <Preference
+    <PreferenceCategory android:title="@string/with_thanks" >
+        <Preference
         android:summary="@string/evo_thx"
         android:title="EvoWizz" />
-    <Preference
-        android:summary="@string/ja_som_thx"
-        android:title="ja_som" />
-    <Preference
-        android:summary="@string/nin_thx"
-        android:title="Ninnix96" />
-    <Preference
-        android:summary="@string/ita_thx"
-        android:title="Itachi1706" />
+        <Preference
+            android:summary="@string/ja_som_thx"
+            android:title="ja_som" />
+        <Preference
+            android:summary="@string/nin_thx"
+            android:title="Ninnix96" />
+        <Preference
+            android:summary="@string/ita_thx"
+            android:title="Itachi1706" />
+    </PreferenceCategory>
+
+
 
 </PreferenceScreen>
