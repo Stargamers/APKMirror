@@ -37,6 +37,13 @@ import im.delight.android.webview.AdvancedWebView
 
 class MainActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncResponse {
 
+    companion object {
+        private const val APKMIRROR_URL = "https://www.apkmirror.com/"
+        private const val APKMIRROR_UPLOAD_URL = "https://www.apkmirror.com/apk-upload/"
+
+        private val COLOR_STATES = arrayOf(intArrayOf(android.R.attr.state_checked), intArrayOf(-android.R.attr.state_checked))
+    }
+
     private var webView: AdvancedWebView? = null
     private var progressBar: ProgressBar? = null
     private var navigation: BottomNavigationView? = null
@@ -65,10 +72,8 @@ class MainActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRespons
     private val tabSelectListener = BottomNavigationView.OnNavigationItemSelectedListener { menuItem ->
         if (triggerAction) {
             when (menuItem.itemId) {
-                R.id.navigation_home //Home pressed
-                -> selectNavigationItem(APKMIRROR_URL)
-                R.id.navigation_upload //Upload pressed
-                -> selectNavigationItem(APKMIRROR_UPLOAD_URL)
+                R.id.navigation_home -> selectNavigationItem(APKMIRROR_URL) //Home pressed
+                R.id.navigation_upload -> selectNavigationItem(APKMIRROR_UPLOAD_URL) //Upload pressed
                 R.id.navigation_settings //Settings pressed
                 -> {
                     if (firstLoadingView!!.visibility == View.VISIBLE)
@@ -126,10 +131,9 @@ class MainActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRespons
             val link = intent
             val data = link.data
 
-            if (data != null) {
-                //App was opened from browser
-                url = data.toString()
-            } else {
+            if (data != null)
+                url = data.toString() //App was opened from browser
+            else {
                 //data is null which means it was either launched from shortcuts or normally
                 val bundle = link.extras
                 if (bundle == null) {
@@ -178,7 +182,6 @@ class MainActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRespons
                         clipboard.primaryClip = clip
                     }.show()
         }
-
     }
 
     private fun initNavigation() {
@@ -445,13 +448,4 @@ class MainActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRespons
         val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         startActivity(browserIntent)
     }
-
-    companion object {
-
-        private const val APKMIRROR_URL = "https://www.apkmirror.com/"
-        private const val APKMIRROR_UPLOAD_URL = "https://www.apkmirror.com/apk-upload/"
-
-        private val COLOR_STATES = arrayOf(intArrayOf(android.R.attr.state_checked), intArrayOf(-android.R.attr.state_checked))
-    }
-
 }
