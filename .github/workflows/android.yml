@@ -8,7 +8,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: msfjarvis/setup-android@0.2
-    - name: Build Android App
+    - name: "Run test suite"
+    - uses: msfjarvis/setup-android@1.0
+      with:
+      entrypoint: ./gradlew
+      args: build
     
   
