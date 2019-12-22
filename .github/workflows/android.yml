@@ -1,3 +1,14 @@
   name: setup-android
-  uses: msfjarvis/setup-android@0.2
+  
+  on: [push]
 
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: msfjarvis/setup-android@0.2
+    - name: Build Android App
+    
+  
