@@ -1,6 +1,6 @@
-  name: setup-android
-  
-  on: [push]
+  name: Android CI
+
+on: [push]
 
 jobs:
   build:
