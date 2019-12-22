@@ -2,8 +2,8 @@
 
  on: [push]
 
-jobs:
-  build:
+ jobs:
+   build:
 
     runs-on: ubuntu-latest
 
